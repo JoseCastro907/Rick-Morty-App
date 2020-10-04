@@ -2,27 +2,28 @@ package cr.ac.ucr.rickmorty.models;
 
 import java.util.ArrayList;
 
-public class LocationResponse {
+public class EpisodeResponse {
 
-    ArrayList<Location> results;
+    ArrayList<Episode> results;
 
-    public LocationResponse() {
+    public EpisodeResponse() {
     }
 
-    public LocationResponse(ArrayList<Location> results) {
+    public EpisodeResponse(ArrayList<Episode> results) {
         this.results = results;
     }
-    public ArrayList<Location> getResults(){
+
+    public ArrayList<Episode> getResults() {
         return results;
     }
 
-    public void setResults(ArrayList<Location> results) {
+    public void setResults(ArrayList<Episode> results) {
         this.results = results;
     }
 
     @Override
     public String toString() {
-        return "LocationResponse{" +
+        return "EpisodeResponse{" +
                 "results=" + results +
                 '}';
     }

@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CharacterActivity">
+    tools:context=".CharacterActivity"
+    android:background="@drawable/character_bg">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -21,9 +22,9 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="800dp"
+                android:layout_height="600dp"
                 android:layout_margin="16dp"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="@android:color/white"
                 app:contentPadding="16dp"
                 app:cardCornerRadius="8dp"
                 >
@@ -66,13 +67,11 @@
                         android:textColor="@color/colorPrimaryDark" />
                 </LinearLayout>
 
-
             </androidx.cardview.widget.CardView>
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -85,10 +84,12 @@
             android:layout_height="300dp"
             android:background="@color/colorPrimary"
             android:fitsSystemWindows="true"
-            app:layout_scrollFlags="enterAlways|scroll"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="@color/colorPrimary"
             >
 
             <ImageView
+                android:scaleType="fitXY"
                 android:id="@+id/iv_cover"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -100,14 +101,13 @@
                 android:id="@+id/t_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:layout_collapseMode="pin"
+                app:titleTextColor="@android:color/white"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-
     </com.google.android.material.appbar.AppBarLayout>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

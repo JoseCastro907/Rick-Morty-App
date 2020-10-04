@@ -12,8 +12,7 @@ public interface CharacterService {
 
     @Headers("Content-Type: application/json")
     @GET("character")
-    Call<CharacterResponse> getCharacters();
-
+    Call<CharacterResponse> getCharacters(@Query("page") int page);
 
     @Headers("Content-Type: application/json")
     @GET("character/{id}")

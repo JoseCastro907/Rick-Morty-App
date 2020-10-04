@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
@@ -33,6 +34,12 @@ public class CharacterFragment extends Fragment {
     private AppCompatActivity activity;
     private ArrayList<Character> characters;
     private CharactersAdapter charactersAdapter;
+    private ProgressBar pbLoading;
+    private RecyclerView rvCharacters;
+
+    boolean canLoad = true;
+    int limit = 0;
+    int page =1;
 
     public CharacterFragment() {
         // Required empty public constructor
@@ -63,7 +70,11 @@ public class CharacterFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_character, container, false);
 
-        RecyclerView rvCharacters = view.findViewById(R.id.rv_characters);
+        pbLoading = view.findViewById(R.id.pb_loading);
+
+        rvCharacters = view.findViewById(R.id.rv_characters);
+
+
 
         //ArrayList -------> Adapter <-------- RV
 
@@ -79,8 +90,12 @@ public class CharacterFragment extends Fragment {
 
         charactersAdapter.addCharacters(characters);
 
+        setupRVScrollListener(rvCharacters, linearLayoutManager);
+
+
         return view;
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -88,13 +103,15 @@ public class CharacterFragment extends Fragment {
 
         //TODO: se hace la lógica
 
-        getCharactersInfo();
+        getCharactersInfo(page);
     }
 
-    private void getCharactersInfo() {
+    private void getCharactersInfo(int page) {
+
+        canLoad = false;
         CharacterService characterService = RetrofitBuilder.createService(CharacterService.class);
 
-        Call<CharacterResponse> response = characterService.getCharacters();
+        Call<CharacterResponse> response = characterService.getCharacters(page);
 
         response.enqueue(new Callback<CharacterResponse>() {
 
@@ -106,22 +123,65 @@ public class CharacterFragment extends Fragment {
 
                     ArrayList<Character> characters = characterResponse.getResults();
 
-                    for(Character character: characters){
-                        Log.i(TAG, "Character: " + character.getName());
-                    }
+                  // Log.i(TAG, String.valueOf(call.request().url()));
 
                     charactersAdapter.addCharacters(characters);
+
+                    showCharacters(true);
 
                 } else{
                     Log.e(TAG, "onError: " + response.errorBody());
                 }
+
+                canLoad = true;
+
             }
 
             @Override
             public void onFailure(@NonNull Call<CharacterResponse> call, @NonNull Throwable t) {
+                canLoad = true;
                 throw new RuntimeException(t);
             }
         });
+    }
+
+    private void setupRVScrollListener(RecyclerView recyclerView, LinearLayoutManager linearLayoutManager){
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                // dy = + -> si hace scroll hacia abajo
+                // dy = - -> si hace scroll hacia arriba
+                if (dy > 0){
+                   // Log.i(TAG,"onScrolled: " + dy);
+
+                    //total de items
+                    int totalItems = linearLayoutManager.getItemCount();
+                    //items que ya se mostraron
+                    int pastItems = linearLayoutManager.findFirstVisibleItemPosition();
+                    //items que se estan mostrando
+                    int visibleItems = linearLayoutManager.getChildCount();
+
+
+                    if(canLoad){
+                        if ((pastItems + visibleItems)>= totalItems){
+                            page++;
+                            pbLoading.setVisibility(View.VISIBLE);
+
+                            getCharactersInfo(page);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private void showCharacters(boolean setVisible){
+        rvCharacters.setVisibility(setVisible ? View.VISIBLE : View.GONE);
+        pbLoading.setVisibility(!setVisible ? View.VISIBLE : View.GONE);
+
     }
 
     @Override
