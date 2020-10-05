@@ -1,6 +1,5 @@
 package cr.ac.ucr.rickmorty.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -42,16 +41,16 @@ public class LocationsFragment extends Fragment {
 
     boolean canLoad = true;
     int limit = 0;
-    int page =1;
+    int pageLocation =1;
 
     public LocationsFragment() {
-
     }
 
     public static LocationsFragment newInstance() {
         LocationsFragment fragment = new LocationsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -93,15 +92,15 @@ public class LocationsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
-        getLocationsInfo(page);
+        getLocationsInfo(pageLocation);
     }
 
-    private void getLocationsInfo(int page) {
+    private void getLocationsInfo(int pageLocation) {
 
         canLoad = false;
         LocationService locationService = RetrofitBuilder.createService(LocationService.class);
 
-        Call<LocationResponse> response = locationService.getLocations(page);
+        Call<LocationResponse> response = locationService.getLocations(pageLocation);
 
         response.enqueue(new Callback<LocationResponse>() {
             @Override
@@ -148,10 +147,10 @@ public class LocationsFragment extends Fragment {
 
                     if(canLoad){
                         if ((pastItems + visibleItems)>= totalItems){
-                            page++;
+                            pageLocation++;
                             pbLoading.setVisibility(View.VISIBLE);
 
-                            getLocationsInfo(page);
+                            getLocationsInfo(pageLocation);
                         }
                     }
                 }

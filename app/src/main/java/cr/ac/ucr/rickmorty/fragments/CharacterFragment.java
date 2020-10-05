@@ -39,7 +39,7 @@ public class CharacterFragment extends Fragment {
 
     boolean canLoad = true;
     int limit = 0;
-    int page =1;
+    int pageCharacter =1;
 
     public CharacterFragment() {
         // Required empty public constructor
@@ -103,20 +103,22 @@ public class CharacterFragment extends Fragment {
 
         //TODO: se hace la lógica
 
-        getCharactersInfo(page);
+        getCharactersInfo(pageCharacter);
     }
 
-    private void getCharactersInfo(int page) {
+    private void getCharactersInfo(int pageCharacter) {
 
         canLoad = false;
+
         CharacterService characterService = RetrofitBuilder.createService(CharacterService.class);
 
-        Call<CharacterResponse> response = characterService.getCharacters(page);
+        Call<CharacterResponse> response = characterService.getCharacters(pageCharacter);
 
         response.enqueue(new Callback<CharacterResponse>() {
 
             @Override
             public void onResponse(@NonNull Call<CharacterResponse> call, @NonNull Response<CharacterResponse> response) {
+
                 if(response.isSuccessful()){
 
                     CharacterResponse characterResponse = response.body();
@@ -167,10 +169,10 @@ public class CharacterFragment extends Fragment {
 
                     if(canLoad){
                         if ((pastItems + visibleItems)>= totalItems){
-                            page++;
+                            pageCharacter++;
                             pbLoading.setVisibility(View.VISIBLE);
 
-                            getCharactersInfo(page);
+                            getCharactersInfo(pageCharacter);
                         }
                     }
                 }

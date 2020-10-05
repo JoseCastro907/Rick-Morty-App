@@ -9,19 +9,19 @@ public class Episode {
     private String air_date;
     private String episode;
    // private Character characters;
-    private ArrayList<String> character;
+    //private ArrayList<String> character;
     private String url;
 
     public Episode() {
     }
 
-    public Episode(int id, String name, String air_date, String episode, ArrayList<String> character, String url) {
+    public Episode(int id, String name, String air_date, String episode, String url) {
         this.id = id;
         this.name = name;
         this.air_date = air_date;
         this.episode = episode;
         //this.characters = characters;
-        this.character = character;
+        //this.character = character;
         this.url = url;
     }
 
@@ -63,7 +63,7 @@ public class Episode {
 
     public void setCharacters(Character characters) {
         this.characters = characters;
-    }*/
+    }
 
     public ArrayList<String> getCharacter() {
         return character;
@@ -71,7 +71,7 @@ public class Episode {
 
     public void setCharacter(ArrayList<String> character) {
         this.character = character;
-    }
+    }*/
 
     public String getUrl() {
         return url;
@@ -88,7 +88,6 @@ public class Episode {
                 ", name='" + name + '\'' +
                 ", air_date='" + air_date + '\'' +
                 ", episode='" + episode + '\'' +
-                ", character=" + character +
                 ", url='" + url + '\'' +
                 '}';
     }
